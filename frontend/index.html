@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpsPulse — Real-Time Business Intelligence</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/landing.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NOISE OVERLAY -->
+  <div class="noise-overlay"></div>
+
+  <!-- GRID BACKGROUND -->
+  <div class="grid-bg"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">OpsPulse</span>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span class="status-text">SYSTEM READY</span>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <main class="hero">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-tag">REAL-TIME INTELLIGENCE</span>
+      <span class="eyebrow-line"></span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="title-line line-1">Your Business.</span>
+      <span class="title-line line-2">Live. <em>Always.</em></span>
+    </h1>
+
+    <p class="hero-desc">
+      OpsPulse streams your sales, inventory, and support data in real-time —<br/>
+      surfacing crises before they cost you, and opportunities before they pass.
+    </p>
+
+    <!-- BUSINESS TYPE SELECTOR -->
+    <div class="selector-section">
+      <p class="selector-label">↓ Choose your business type to begin</p>
+      <div class="business-cards">
+        <div class="biz-card" data-type="retail" onclick="selectBusiness('retail', this)">
+          <div class="biz-icon">🏪</div>
+          <div class="biz-name">Retail Store</div>
+          <div class="biz-desc">Physical storefront, inventory-heavy</div>
+          <div class="biz-arrow">→</div>
+        </div>
+        <div class="biz-card" data-type="ecommerce" onclick="selectBusiness('ecommerce', this)">
+          <div class="biz-icon">🛒</div>
+          <div class="biz-name">E-commerce</div>
+          <div class="biz-desc">Online orders, logistics & returns</div>
+          <div class="biz-arrow">→</div>
+        </div>
+        <div class="biz-card" data-type="restaurant" onclick="selectBusiness('restaurant', this)">
+          <div class="biz-icon">🍽️</div>
+          <div class="biz-name">Restaurant</div>
+          <div class="biz-desc">Table service, kitchen & delivery</div>
+          <div class="biz-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAUNCH BUTTON (hidden until selected) -->
+    <div class="launch-section" id="launchSection">
+      <button class="launch-btn" id="launchBtn" onclick="launchDashboard()">
+        <span class="btn-text">LAUNCH DASHBOARD</span>
+        <span class="btn-icon">⟶</span>
+        <span class="btn-pulse"></span>
+      </button>
+      <p class="launch-note" id="launchNote"></p>
+    </div>
+
+  </main>
+
+  <!-- FEATURE STRIP -->
+  <section class="feature-strip">
+    <div class="strip-item">
+      <span class="strip-num">01</span>
+      <span class="strip-label">Real-Time Data Streaming</span>
+    </div>
+    <div class="strip-divider">◆</div>
+    <div class="strip-item">
+      <span class="strip-num">02</span>
+      <span class="strip-label">AI-Powered Stress Score</span>
+    </div>
+    <div class="strip-divider">◆</div>
+    <div class="strip-item">
+      <span class="strip-num">03</span>
+      <span class="strip-label">Instant Crisis Alerts</span>
+    </div>
+    <div class="strip-divider">◆</div>
+    <div class="strip-item">
+      <span class="strip-num">04</span>
+      <span class="strip-label">War Room Mode</span>
+    </div>
+  </section>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>

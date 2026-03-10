@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OpsPulse — Dashboard</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="noise-overlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">OpsPulse</span>
+    </div>
+
+    <div class="sidebar-biz" id="sidebarBizBadge">
+      <span class="biz-badge-icon" id="bizBadgeIcon">🏪</span>
+      <span class="biz-badge-name" id="bizBadgeName">Retail Store</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-view="overview" onclick="switchView('overview', this)">
+        <span class="nav-item-icon">▦</span>
+        <span>Overview</span>
+      </a>
+      <a class="nav-item" data-view="sales" onclick="switchView('sales', this)">
+        <span class="nav-item-icon">↗</span>
+        <span>Sales</span>
+      </a>
+      <a class="nav-item" data-view="inventory" onclick="switchView('inventory', this)">
+        <span class="nav-item-icon">◫</span>
+        <span>Inventory</span>
+      </a>
+      <a class="nav-item" data-view="support" onclick="switchView('support', this)">
+        <span class="nav-item-icon">◎</span>
+        <span>Support</span>
+      </a>
+      <a class="nav-item" data-view="alerts" onclick="switchView('alerts', this)">
+        <span class="nav-item-icon">⚡</span>
+        <span>Alerts</span>
+        <span class="nav-badge" id="alertNavBadge">0</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-roles">
+      <p class="roles-label">VIEW AS</p>
+      <button class="role-btn active" id="roleOwner" onclick="setRole('owner')">👨‍💼 Owner</button>
+      <button class="role-btn" id="roleOps" onclick="setRole('ops')">👨‍🔧 Ops Manager</button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <button class="war-room-trigger" id="warRoomBtn" onclick="toggleWarRoom()">
+        <span class="war-icon">⚠</span>
+        <span>WAR ROOM</span>
+      </button>
+      <a class="back-home" href="index.html">← Change Business</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrap">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h2 class="page-title" id="pageTitle">Overview</h2>
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span>LIVE</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="sim-time" id="simTime">--:--</div>
+        <div class="stress-mini" id="stressMini">
+          <span class="stress-mini-label">STRESS</span>
+          <span class="stress-mini-val" id="stressMiniVal">--</span>
+        </div>
+        <button class="pause-btn" id="pauseBtn" onclick="togglePause()">⏸ PAUSE</button>
+      </div>
+    </header>
+
+    <!-- VIEWS CONTAINER -->
+    <div class="views-container">
+
+      <!-- ═══ OVERVIEW VIEW ═══ -->
+      <section class="view active" id="view-overview">
+
+        <!-- KPI STRIP -->
+        <div class="kpi-strip">
+          <div class="kpi-card" id="kpi-sales">
+            <div class="kpi-label">TOTAL SALES TODAY</div>
+            <div class="kpi-value" id="kpiSalesVal">₹0</div>
+            <div class="kpi-trend" id="kpiSalesTrend">↑ --</div>
+          </div>
+          <div class="kpi-card" id="kpi-orders">
+            <div class="kpi-label">ORDERS PROCESSED</div>
+            <div class="kpi-value" id="kpiOrdersVal">0</div>
+            <div class="kpi-trend" id="kpiOrdersTrend">↑ --</div>
+          </div>
+          <div class="kpi-card" id="kpi-tickets">
+            <div class="kpi-label">OPEN TICKETS</div>
+            <div class="kpi-value" id="kpiTicketsVal">0</div>
+            <div class="kpi-trend" id="kpiTicketsTrend">-- --</div>
+          </div>
+          <div class="kpi-card" id="kpi-lowstock">
+            <div class="kpi-label">LOW STOCK ITEMS</div>
+            <div class="kpi-value" id="kpiLowStockVal">0</div>
+            <div class="kpi-trend" id="kpiLowStockTrend">-- --</div>
+          </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="overview-grid">
+
+          <!-- STRESS SCORE CARD -->
+          <div class="card stress-card">
+            <div class="card-header">
+              <span class="card-title">BUSINESS STRESS SCORE</span>
+              <span class="card-tag">LIVE</span>
+            </div>
+            <div class="stress-display">
+              <div class="stress-gauge-wrap">
+                <canvas id="stressGauge" width="220" height="130"></canvas>
+                <div class="stress-val-center">
+                  <span id="stressScore">--</span>
+                  <small>/100</small>
+                </div>
+              </div>
+              <div class="stress-meta">
+                <div class="stress-status" id="stressStatus">
+                  <span class="status-indicator"></span>
+                  <span id="stressStatusText">Calculating...</span>
+                </div>
+                <div class="stress-breakdown">
+                  <div class="breakdown-row">
+                    <span>Sales Health</span>
+                    <div class="breakdown-bar"><div class="breakdown-fill" id="bfSales" style="width:0%"></div></div>
+                    <span id="bvSales">--</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span>Inventory</span>
+                    <div class="breakdown-bar"><div class="breakdown-fill" id="bfInv" style="width:0%"></div></div>
+                    <span id="bvInv">--</span>
+                  </div>
+                  <div class="breakdown-row">
+                    <span>Support</span>
+                    <div class="breakdown-bar"><div class="breakdown-fill" id="bfSupport" style="width:0%"></div></div>
+                    <span id="bvSupport">--</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SALES MINI CHART -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <span class="card-title">SALES TREND</span>
+              <span class="card-sub" id="salesChartSub">Last 10 events</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="salesTrendChart"></canvas>
+            </div>
+          </div>
+
+          <!-- ALERTS FEED -->
+          <div class="card alerts-card">
+            <div class="card-header">
+              <span class="card-title">ALERT FEED</span>
+              <span class="alert-count-badge" id="alertCountBadge">0 active</span>
+            </div>
+            <div class="alerts-feed" id="alertsFeed">
+              <div class="no-alerts">
+                <span>◎</span>
+                <p>Monitoring... no alerts yet</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT EVENTS -->
+          <div class="card events-card">
+            <div class="card-header">
+              <span class="card-title">LIVE EVENT STREAM</span>
+            </div>
+            <div class="events-feed" id="eventsFeed">
+              <div class="event-placeholder">Waiting for data stream...</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══ SALES VIEW ═══ -->
+      <section class="view" id="view-sales">
+        <div class="view-grid-2">
+          <div class="card span-2">
+            <div class="card-header">
+              <span class="card-title">SALES OVER TIME</span>
+              <div class="chart-legend" id="salesLegend"></div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="salesFullChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">TOP PRODUCTS</span></div>
+            <div class="chart-wrap">
+              <canvas id="topProductsChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">REVENUE BY HOUR</span></div>
+            <div class="chart-wrap">
+              <canvas id="revenueHourChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ INVENTORY VIEW ═══ -->
+      <section class="view" id="view-inventory">
+        <div class="view-grid-2">
+          <div class="card span-2">
+            <div class="card-header">
+              <span class="card-title">INVENTORY LEVELS</span>
+              <span class="card-sub">Live stock count</span>
+            </div>
+            <div class="inventory-bars" id="inventoryBars">
+              <!-- Dynamically filled -->
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">STOCK DISTRIBUTION</span></div>
+            <div class="chart-wrap">
+              <canvas id="stockDonutChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">LOW STOCK ALERTS</span></div>
+            <div class="low-stock-list" id="lowStockList">
+              <p class="empty-state">No low stock items detected</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SUPPORT VIEW ═══ -->
+      <section class="view" id="view-support">
+        <div class="view-grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">TICKET STATUS</span></div>
+            <div class="chart-wrap">
+              <canvas id="ticketStatusChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">ISSUE CATEGORIES</span></div>
+            <div class="chart-wrap">
+              <canvas id="issueCategoryChart"></canvas>
+            </div>
+          </div>
+          <div class="card span-2">
+            <div class="card-header">
+              <span class="card-title">TICKET FEED</span>
+              <span class="card-sub" id="ticketSubText">0 open • 0 closed</span>
+            </div>
+            <div class="ticket-table" id="ticketTable">
+              <div class="ticket-row ticket-header">
+                <span>ID</span><span>ISSUE</span><span>STATUS</span><span>TIME</span>
+              </div>
+              <!-- Dynamic rows -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ ALERTS VIEW ═══ -->
+      <section class="view" id="view-alerts">
+        <div class="alerts-full-page">
+          <div class="alert-filter-bar">
+            <button class="filter-btn active" onclick="filterAlerts('all', this)">ALL</button>
+            <button class="filter-btn" onclick="filterAlerts('crisis', this)">🔴 CRISIS</button>
+            <button class="filter-btn" onclick="filterAlerts('opportunity', this)">🟡 OPPORTUNITY</button>
+            <button class="filter-btn" onclick="filterAlerts('anomaly', this)">🔵 ANOMALY</button>
+          </div>
+          <div class="alerts-full-list" id="alertsFullList">
+            <div class="no-alerts-full">No alerts yet. System is monitoring...</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- WAR ROOM OVERLAY -->
+  <div class="war-room-overlay" id="warRoomOverlay">
+    <div class="war-room-screen">
+      <div class="war-room-header">
+        <div class="war-blink">⚠ WAR ROOM ACTIVE</div>
+        <button class="war-close" onclick="toggleWarRoom()">✕ EXIT</button>
+      </div>
+      <div class="war-room-body">
+        <div class="war-section">
+          <h3>CRITICAL ALERTS</h3>
+          <div id="warAlerts" class="war-alerts-list">
+            <p class="war-empty">No critical alerts at this time</p>
+          </div>
+        </div>
+        <div class="war-section">
+          <h3>URGENT METRICS</h3>
+          <div class="war-metrics" id="warMetrics">
+            <div class="war-metric">
+              <span class="wm-label">STRESS SCORE</span>
+              <span class="wm-val" id="wmStress">--</span>
+            </div>
+            <div class="war-metric">
+              <span class="wm-label">OPEN TICKETS</span>
+              <span class="wm-val" id="wmTickets">--</span>
+            </div>
+            <div class="war-metric">
+              <span class="wm-label">LOW STOCK</span>
+              <span class="wm-val" id="wmStock">--</span>
+            </div>
+            <div class="war-metric">
+              <span class="wm-label">REVENUE TODAY</span>
+              <span class="wm-val" id="wmRevenue">--</span>
+            </div>
+          </div>
+        </div>
+        <div class="war-section">
+          <h3>RECOMMENDED ACTIONS</h3>
+          <div id="warActions" class="war-actions-list">
+            <p class="war-empty">Generating recommendations...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/charts.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+/* ═══════════════════════════════════════════════
+   OPSPULSE — GLOBAL STYLES
+   Theme: Industrial Dark / Data Terminal
+════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Core Colors */
+  --bg-0: #0a0b0f;
+  --bg-1: #0e1016;
+  --bg-2: #131520;
+  --bg-3: #1a1d2e;
+  --bg-card: #13151f;
+  --bg-card-hover: #191c2d;
+
+  /* Borders */
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-mid: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.15);
+
+  /* Text */
+  --text-primary: #e8eaf2;
+  --text-secondary: #8890aa;
+  --text-muted: #4d5468;
+  --text-label: #5d6480;
+
+  /* Accent — Electric Amber */
+  --accent: #f5a623;
+  --accent-dim: rgba(245,166,35,0.15);
+  --accent-glow: rgba(245,166,35,0.35);
+
+  /* Status Colors */
+  --crisis: #ff3b3b;
+  --crisis-dim: rgba(255,59,59,0.15);
+  --opportunity: #f5c842;
+  --opportunity-dim: rgba(245,200,66,0.12);
+  --anomaly: #4a9eff;
+  --anomaly-dim: rgba(74,158,255,0.12);
+  --healthy: #2ecc71;
+  --healthy-dim: rgba(46,204,113,0.12);
+  --moderate: #f5a623;
+  --moderate-dim: rgba(245,166,35,0.12);
+
+  /* Chart Colors */
+  --chart-1: #f5a623;
+  --chart-2: #4a9eff;
+  --chart-3: #a78bfa;
+  --chart-4: #2ecc71;
+  --chart-5: #ff6b6b;
+
+  /* Fonts */
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* Sizing */
+  --sidebar-w: 220px;
+  --topbar-h: 60px;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+html, body {
+  background-color: var(--bg-0);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NOISE OVERLAY ── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── GRID BACKGROUND ── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.023) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.023) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── CARD BASE ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.card:hover {
+  border-color: var(--border-mid);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.card-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-label);
+}
+.card-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(245,166,35,0.2);
+  animation: tagPulse 2s infinite;
+}
+@keyframes tagPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── CHART WRAP ── */
+.chart-wrap {
+  position: relative;
+  height: 180px;
+}
+.chart-wrap.tall {
+  height: 260px;
+}
+
+/* ── SPAN HELPERS ── */
+.span-2 { grid-column: span 2; }
+
+/* ── UTILITY ── */
+.empty-state {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 24px;
+  font-family: var(--font-mono);
+}
