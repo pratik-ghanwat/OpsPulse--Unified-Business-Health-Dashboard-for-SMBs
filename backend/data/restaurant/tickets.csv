@@ -1,0 +1,16 @@
+ticket_id,issue,status
+1001,Wrong size received,Open
+1002,Delivery delay,Closed
+1003,Damaged item,Open
+1004,Return request,Pending
+1005,Exchange needed,Open
+1006,Billing error,Closed
+1007,Wrong color delivered,Open
+1008,Missing item in order,Open
+1009,Refund not processed,Pending
+1010,Product defective,Closed
+1011,Size unavailable,Open
+1012,Delivery delay,Open
+1013,Wrong size received,Closed
+1014,Return request,Open
+1015,Damaged packaging,Pending
